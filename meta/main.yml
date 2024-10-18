@@ -1,0 +1,60 @@
+---
+dependencies:
+  # Disable NUMA for MongoDB:
+  # https://docs.mongodb.com/v3.2/administration/production-notes/#mongodb-and-numa-hardware
+  - src: https://github.com/cisagov/ansible-role-disable-numa
+    name: disable_numa
+  # MongoDB doesn't like transparent huge pages:
+  # https://docs.mongodb.com/manual/tutorial/transparent-huge-pages/
+  - src: https://github.com/GekoCloud/ansible-role-disable-thp
+    name: disable_thp
+    vars:
+      disable_thp_before_service: mongod
+  - src: https://github.com/cisagov/ansible-role-numactl
+    name: numactl
+  - src: https://github.com/cisagov/ansible-role-pip
+    name: pip
+    vars:
+      install_pip2: true
+  - src: https://github.com/cisagov/ansible-role-python
+    name: python
+    vars:
+      install_python2: true
+galaxy_info:
+  author: Shane Frasier
+  company: CISA Cyber Assessments
+  description: Install MongoDB.
+  galaxy_tags:
+    - mongodb
+    - mongo
+  license: CC0
+  # With the release of version 2.10, Ansible finally correctly
+  # identifies Kali Linux as being the Kali distribution of the Debian
+  # OS family.  This simplifies a lot of things for roles that support
+  # Kali Linux, so it makes sense to force the installation of Ansible
+  # 2.10 or newer.
+  min_ansible_version: "2.10"
+  namespace: cisagov
+  platforms:
+    # - name: Amazon Linux 2
+    #   versions:
+    #     - any
+    - name: Debian
+      versions:
+        - stretch
+    #     - buster
+    #     - bullseye
+    #     # Kali linux isn't an option here, but it is based on
+    #     # Debian Testing:
+    #     # https://www.kali.org/docs/policy/kali-linux-relationship-with-debian
+    #     - bookworm
+    # - name: Fedora
+    #   versions:
+    #     - "36"
+    #     - "37"
+    # - name: Ubuntu
+    #   versions:
+    #     - bionic
+    #     - focal
+    #     - jammy
+  role_name: mongo
